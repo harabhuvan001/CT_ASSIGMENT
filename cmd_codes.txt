@@ -1,0 +1,42 @@
+﻿Command line codes for setup
+
+1.  git clone https://github.com/scrineym/docker-hadoop.git
+Edit the docker compose.yml file with pyspark
+pyspark:
+    image: jupyter/pyspark-notebook
+    container_name: pyspark
+    restart: always
+    ports:
+      - "8888:8888"
+    environment:
+      - SPARK_MASTER=local[*]
+      - SPARK_HOME=/usr/local/spark
+      - HADOOP_CONF_DIR=/usr/local/hadoop/etc/hadoop
+      - HADOOP_HOME=/usr/local/hadoop
+      - PYSPARK_PYTHON=python3
+      - PYSPARK_DRIVER_PYTHON=jupyter
+      - PYSPARK_DRIVER_PYTHON_OPTS="lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root"
+2. Cd docker-hadoop
+3. Docker compose up -d
+4. docker exec -it namenode bash
+To upload files in hdfs
+5. hdfs dfs -mkdir -p /users/hara/datasets
+6. docker cp "D:\\DCU\\Cloud Technologies\\Assigment\\Datasets\\Crime_sex.csv" namenode:/tmp/Crime_sex.csv
+docker cp "D:\\DCU\\Cloud Technologies\\Assigment\\Datasets\\Pornography_laws_by_region.csv" namenode:/tmp/Pornography_laws_by_region.csv
+7.hdfs dfs -put /tmp/Crime_sex.csv /users/hara/datasets/
+hdfs dfs -put /tmp/Pornography_laws_by_region.csv /users/hara/datasets/
+
+
+8. hdfs dfs -ls /user/hara/datasets
+
+
+
+
+Steps to download the file to local machine
+1. docker exec -it namenode bash
+2. hdfs dfs -get/users/hara/datasets/Merged_Crime_Pornography_Laws_Data.csv /tmp/
+hdfs dfs -get /users/hara/datasets/processed_data/Crime_sex.csv_cleaned /tmp/
+hdfs dfs -get/users/hara/datasets/Merged_Crime_Pornography_Laws_Data.csv /tmp/
+   3. docker cp namenode:/tmp/Merged_Crime_Pornography_Laws_Data1.csv "D:/DCU/Cloud Technologies/Assigment/Datasets/"
+docker cp namenode:/tmp/Crime_sex.csv_cleaned "D:/DCU/Cloud Technologies/Assigment/Datasets/"
+docker cp namenode:/tmp/Merged_Crime_Pornography_Laws_Data.csv "D:/DCU/Cloud Technologies/Assigment/Datasets/"
